@@ -1,4 +1,4 @@
 import { createContext } from "react";
-import type { TaskContextType } from "../types/task";
+import type { TaskContextType } from "../types/Task";
 
 export const TaskContext = createContext<TaskContextType | undefined>(undefined);

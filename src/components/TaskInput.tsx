@@ -1,19 +1,19 @@
 import { useState } from "react"
-import { Plus } from 'lucide-react'
 import { useTasks } from '../hooks/useTasks'
 import { wordFormatter } from '../utils/wordFormatter'
 
 export function TaskInput() {
   const { tasks, setTasks } = useTasks()
-  const [inputTextTask, setInputTextTask] = useState('')
+  const [inputAddTask, setInputAddTask] = useState('')
 
   function addTask() {
+    const formattedInputAddTask = wordFormatter(inputAddTask.trim())
+
     const tasksNames = tasks.map(task => task.name)
-    const isTaskExist = tasksNames.some(task => task == inputTextTask)
+    const isTaskExist = tasksNames.some(task => task == formattedInputAddTask)
     
-    if (isTaskExist || !inputTextTask.trim()) {
+    if (isTaskExist || !inputAddTask.trim()) {
       alert('Não foi possível adicionar a atividade.')
-      setInputTextTask('')
 
       return;
     }
@@ -22,38 +22,35 @@ export function TaskInput() {
       ...prev,
       {
         id: crypto.randomUUID(),
-        name: wordFormatter(inputTextTask),
+        name: formattedInputAddTask,
         done: false,
         editing: false,
       }
     ])
 
-    setInputTextTask('')
+    setInputAddTask('')
   }
 
   return (
-    <div className="flex flex-col items-center justify-center pt-5">
-      <h1 className="text-5xl text-blue-300">ToDoList</h1>
-      <div className="flex items-center justify-center gap-4 py-10">
-        <input
-          type="text"
-          name="nametxt"
-          id="idtxt"
-          size={40}
-          maxLength={20}
-          className="bg-white p-1 m-0"
-          value={inputTextTask}
-          placeholder="Digite sua nova atividade..."
-          onChange={(e) => setInputTextTask(wordFormatter(e.target.value))}
-        />
-        <button
-          className="flex items-center justify-center bg-blue-700 text-white text-2xl size-9 hover:bg-blue-800 rounded-2xl"
-          type="submit"
-          onClick={addTask}
-        >
-          <Plus />
-        </button>
-      </div>
+    <div className="flex items-center justify-center gap-3 py-10 px-12">
+      <input
+        type="text"
+        name="nametxt"
+        id="idtxt"
+        size={40}
+        maxLength={30}
+        className="flex-5/6 bg-zinc-600/10 text-zinc-800 px-4 py-2 rounded-[8px]"
+        value={inputAddTask}
+        placeholder="Adicionar uma nova tarefa..."
+        onChange={(e) => setInputAddTask(wordFormatter(e.target.value))}
+      />
+      <button
+        className="flex flex-1/6 items-center text-md justify-center bg-blue-600 hover:bg-blue-700 text-white size-10 rounded-[8px]"
+        type="submit"
+        onClick={addTask}
+      >
+        Adicionar
+      </button>
     </div>
   )
 }
