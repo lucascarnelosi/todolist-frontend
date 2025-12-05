@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useTasks } from '../hooks/useTasks'
-import type { TaskProps } from '../types/task'
+import type { TaskProps } from '../types/Task'
 import { wordFormatter } from '../utils/wordFormatter'
 import { SquareCheckBig, Square, X, Pencil, Check, Trash2 } from 'lucide-react'
 
