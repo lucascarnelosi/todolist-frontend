@@ -1,9 +1,9 @@
 import type { Dispatch, SetStateAction } from "react";
 
 export interface TaskProps {
-  id: string,
-  name: string,
-  done: boolean,
+  id: string;
+  title: string;
+  completed: boolean;
 }
 
 export interface TaskContextType {

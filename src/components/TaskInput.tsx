@@ -1,16 +1,19 @@
 import { useState } from "react"
 import { useTasks } from '../hooks/useTasks'
 import { wordFormatter } from '../utils/wordFormatter'
+import { createTask } from "../services/tasks"
 
 export function TaskInput() {
   const { tasks, setTasks } = useTasks()
   const [inputAddTask, setInputAddTask] = useState('')
 
-  function addTask() {
+  async function addTask() {
     const formattedInputAddTask = wordFormatter(inputAddTask.trim())
 
-    const tasksNames = tasks.map(task => task.name)
-    const isTaskExist = tasksNames.some(task => task == formattedInputAddTask)
+    const newTask = await createTask(formattedInputAddTask)
+
+    const tasksTitles = tasks.map(task => task.title)
+    const isTaskExist = tasksTitles.some(task => task == formattedInputAddTask)
     
     if (isTaskExist || !inputAddTask.trim()) {
       alert('Não foi possível adicionar a atividade.')
@@ -20,12 +23,7 @@ export function TaskInput() {
 
     setTasks(prev => [
       ...prev,
-      {
-        id: crypto.randomUUID(),
-        name: formattedInputAddTask,
-        done: false,
-        editing: false,
-      }
+      newTask
     ])
 
     setInputAddTask('')
@@ -42,7 +40,7 @@ export function TaskInput() {
         className="flex-5/6 bg-zinc-600/10 text-zinc-800 px-4 py-2 rounded-[8px]"
         value={inputAddTask}
         placeholder="Adicionar uma nova tarefa..."
-        onChange={(e) => setInputAddTask(wordFormatter(e.target.value))}
+        onChange={e => setInputAddTask(wordFormatter(e.target.value))}
       />
       <button
         className="flex flex-1/6 items-center text-md justify-center bg-blue-600 hover:bg-blue-700 text-white size-10 rounded-[8px]"

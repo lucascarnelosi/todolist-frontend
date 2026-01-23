@@ -6,7 +6,12 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const [tasks, setTasks] = useState<TaskProps[]>([]);
 
   return (
-    <TaskContext.Provider value={{ tasks, setTasks }}>
+    <TaskContext.Provider
+      value={{
+        tasks,
+        setTasks
+      }}
+    >
       {children}
     </TaskContext.Provider>
   );

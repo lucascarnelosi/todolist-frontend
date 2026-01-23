@@ -3,32 +3,39 @@ import { useTasks } from '../hooks/useTasks'
 import type { TaskProps } from '../types/Task'
 import { wordFormatter } from '../utils/wordFormatter'
 import { SquareCheckBig, Square, X, Pencil, Check, Trash2 } from 'lucide-react'
+import { deleteTask, toggleTaskCompleted, updateTask } from "../services/tasks"
 
 export function Task(p: TaskProps) {
   const { tasks, setTasks } = useTasks()
-  const [inputTask, setInputTask] = useState(p.name)
+  const [inputTask, setInputTask] = useState(p.title)
   const [isEditing, setIsEditing] = useState(false)
 
-  function completeTask() {
+  async function completeTask() {
+    const updated = await toggleTaskCompleted(p.id, !p.completed)
+
     setTasks(prev => 
       prev.map(task => 
         task.id === p.id
-        ? { ...task, done: !task.done }
+        ? updated
         : task
       )
     )
   }
 
-  function removeTask() {
-    const newTasksArray = tasks.filter(task => task.name !== p.name)
+  async function removeTask() {
+    await deleteTask(p.id)
+
+    const newTasksArray = tasks.filter(task => task.id !== p.id)
 
     setTasks(newTasksArray)
   }
 
-  function editTask() {
+  async function editTask() {
     const formattedInputTask = wordFormatter(inputTask.trim())
 
-    const tasksNames = tasks.map(task => task.name)
+    const updated = await updateTask(p.id, formattedInputTask)
+
+    const tasksNames = tasks.map(task => task.title)
     const isTaskExist = tasksNames.some(task => task == formattedInputTask)
     
     if (isTaskExist || !inputTask.trim()) {
@@ -40,9 +47,7 @@ export function Task(p: TaskProps) {
     setTasks(prev => 
       prev.map(task => 
         task.id === p.id
-        ? { ...task,
-            name: formattedInputTask,
-          }
+        ? updated
         : task
       )
     )
@@ -55,7 +60,7 @@ export function Task(p: TaskProps) {
       <div className="flex flex-1 items-center gap-3 text-[1.2rem]">
         {!isEditing && (
           <button>
-            {p.done ? (
+            {p.completed ? (
               <SquareCheckBig
                 onClick={completeTask}
                 className="rounded-full"
@@ -83,12 +88,12 @@ export function Task(p: TaskProps) {
             onChange={e => setInputTask(wordFormatter(e.target.value))}
           />
         ) : (
-          <div className={`${p.done ? 'text-zinc-400 line-through' : 'text-black'}`}>
-            {p.name}
+          <div className={`${p.completed ? 'text-zinc-400 line-through' : 'text-black'}`}>
+            {p.title}
           </div>
         )}
       </div>
-      {!p.done && (
+      {!p.completed && (
         <div className="flex gap-6 mx-5">
           {isEditing ? (
             <>
@@ -101,7 +106,7 @@ export function Task(p: TaskProps) {
                 color="#52525c90"
                 cursor="pointer"
                 onClick={() => {
-                  setInputTask(p.name)
+                  setInputTask(p.title)
                   setIsEditing(prev => !prev)
                 }}
               />
@@ -112,7 +117,7 @@ export function Task(p: TaskProps) {
                 color="#19f"
                 cursor="pointer"
                 onClick={() => {
-                  setInputTask(p.name)
+                  setInputTask(p.title)
                   setIsEditing(prev => !prev)
                 }}
               />
