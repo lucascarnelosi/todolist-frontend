@@ -4,9 +4,12 @@ import { TaskHeader } from "../components/TaskHeader";
 import { TaskInput } from "../components/TaskInput";
 import { useTasks } from "../hooks/useTasks";
 import { listTasks } from "../services/tasks";
+import { LogOut } from 'lucide-react'
+import { useAuth } from "../hooks/useAuth";
 
 export function Tasks() {
   const { tasks, setTasks } = useTasks();
+  const { signOut } = useAuth()
 
   const emptyTasks = tasks.length == 0
 
@@ -17,7 +20,7 @@ export function Tasks() {
     }
 
     loadTasks()
-  })
+  }, [setTasks])
 
   return (
     <div className="flex items-start justify-center w-screen min-h-screen pt-10 bg-blue-100">
@@ -41,6 +44,10 @@ export function Tasks() {
           }
         </div>
       </div>
+
+      <button onClick={signOut}>
+        <LogOut cursor="pointer" />
+      </button>
     </div>
   );
 }

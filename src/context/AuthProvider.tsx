@@ -4,6 +4,7 @@ import { login as loginService } from '../services/auth';
 import { logout as logoutService } from '../services/logout';
 import type { User } from '../types/Auth';
 import { getMe } from '../services/user';
+import { api } from '../services/api';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -18,26 +19,31 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const token = localStorage.getItem('@token')
 
-    if (!token) {
-      setLoading(false)
-      return
-    }
+    if (token) {
+      api.defaults.headers.common.Authorization = `Bearer ${token}`
 
-    getMe()
-      .then(user => {
-        setUser(user)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+      getMe()
+        .then(user => {
+          setUser(user)
+        })
+        .catch(() => {
+          localStorage.removeItem('@app:token')
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    } else {
+      setLoading(false)
+    }
   }, [])
 
   async function signIn(email: string, password: string) {
     const { user, token } = await loginService(email, password)
 
     localStorage.setItem('@token', token)
-    
     setUser(user)
+
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
   }
 
   function signOut() {
@@ -47,6 +53,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.removeItem('@refreshToken')
 
     setUser(null)
+  }
+
+  if (loading) {
+    return <p>Carregando...</p>
   }
 
   return (
