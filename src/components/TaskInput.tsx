@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useTasks } from '../hooks/useTasks'
 import { wordFormatter } from '../utils/wordFormatter'
 import { createTask } from "../services/tasks"
+import { Plus } from "lucide-react"
 
 export function TaskInput() {
   const { tasks, setTasks } = useTasks()
@@ -10,8 +11,6 @@ export function TaskInput() {
   async function addTask() {
     const formattedInputAddTask = wordFormatter(inputAddTask.trim())
 
-    const newTask = await createTask(formattedInputAddTask)
-
     const tasksTitles = tasks.map(task => task.title)
     const isTaskExist = tasksTitles.some(task => task == formattedInputAddTask)
     
@@ -19,14 +18,16 @@ export function TaskInput() {
       alert('Não foi possível adicionar a atividade.')
 
       return;
+    } else {
+      const newTask = await createTask(formattedInputAddTask)
+
+      setTasks(prev => [
+        ...prev,
+        newTask
+      ])
+
+      setInputAddTask('')
     }
-
-    setTasks(prev => [
-      ...prev,
-      newTask
-    ])
-
-    setInputAddTask('')
   }
 
   return (
@@ -37,17 +38,18 @@ export function TaskInput() {
         id="idtxt"
         size={40}
         maxLength={30}
-        className="flex-5/6 bg-zinc-600/10 text-zinc-800 px-4 py-2 rounded-[8px]"
+        className="flex-4 bg-zinc-600/10 text-zinc-800 px-4 py-2 rounded-[8px]"
         value={inputAddTask}
         placeholder="Adicionar uma nova tarefa..."
         onChange={e => setInputAddTask(wordFormatter(e.target.value))}
       />
       <button
-        className="flex flex-1/6 items-center text-md justify-center bg-blue-600 hover:bg-blue-700 text-white size-10 rounded-[8px]"
+        className="flex flex-1 items-center justify-center gap-2 text-md bg-blue-600 text-white size-10 rounded-lg hover:bg-blue-700"
         type="submit"
         onClick={addTask}
       >
-        Adicionar
+        <Plus size={20} />
+        New Task
       </button>
     </div>
   )

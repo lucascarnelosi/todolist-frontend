@@ -4,12 +4,10 @@ import { TaskHeader } from "../components/TaskHeader";
 import { TaskInput } from "../components/TaskInput";
 import { useTasks } from "../hooks/useTasks";
 import { listTasks } from "../services/tasks";
-import { LogOut } from 'lucide-react'
-import { useAuth } from "../hooks/useAuth";
+import { TaskStats } from "../components/TaskStats";
 
 export function Tasks() {
   const { tasks, setTasks } = useTasks();
-  const { signOut } = useAuth()
 
   const emptyTasks = tasks.length == 0
 
@@ -23,15 +21,17 @@ export function Tasks() {
   }, [setTasks])
 
   return (
-    <div className="flex items-start justify-center w-screen min-h-screen pt-10 bg-blue-100">
-      <div className="bg-white w-full h-full max-w-200 rounded-[10px] shadow-2xl border-none">
+    <div className="flex items-start justify-center w-full h-full py-10 bg-blue-100">
+      <div className="w-full h-full max-w-200 border-none">
         <TaskHeader />
-        <TaskInput />
+        <TaskStats />
 
-        <div className={`${emptyTasks ? 'flex items-center justify-center text-zinc-500/60 pb-8 h-30 text-lg' : 'flex flex-col gap-4 pb-10'}`}>
+        <div className="bg-white rounded-2xl shadow-xl border border-blue-100 flex flex-col gap-4 pb-10">
+          <TaskInput />
+
           {emptyTasks
             ?
-            "Nenhuma tarefa ainda. Adicione uma acima!"
+            <p className="text-center text-zinc-400 mb-5">Nenhuma tarefa ainda. Adicione uma acima!</p>
             :
             tasks.map(task =>
               <Task
@@ -44,10 +44,6 @@ export function Tasks() {
           }
         </div>
       </div>
-
-      <button onClick={signOut}>
-        <LogOut cursor="pointer" />
-      </button>
     </div>
   );
 }

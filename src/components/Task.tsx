@@ -33,8 +33,6 @@ export function Task(p: TaskProps) {
   async function editTask() {
     const formattedInputTask = wordFormatter(inputTask.trim())
 
-    const updated = await updateTask(p.id, formattedInputTask)
-
     const tasksNames = tasks.map(task => task.title)
     const isTaskExist = tasksNames.some(task => task == formattedInputTask)
     
@@ -42,17 +40,19 @@ export function Task(p: TaskProps) {
       alert('Não foi possível editar a atividade.')
       
       return;
-    }
+    } else {
+      const updated = await updateTask(p.id, formattedInputTask)
 
-    setTasks(prev => 
-      prev.map(task => 
-        task.id === p.id
-        ? updated
-        : task
+      setTasks(prev => 
+        prev.map(task => 
+          task.id === p.id
+          ? updated
+          : task
+        )
       )
-    )
 
-    setIsEditing(prev => !prev)
+      setIsEditing(prev => !prev)
+    }
   }
 
   return (
