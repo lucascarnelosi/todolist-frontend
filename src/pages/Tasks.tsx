@@ -21,27 +21,29 @@ export function Tasks() {
   }, [setTasks])
 
   return (
-    <div className="flex items-start justify-center w-full h-full py-10 bg-blue-100">
+    <div className="flex items-start justify-center w-full min-h-screen py-10 bg-blue-100">
       <div className="w-full h-full max-w-200 border-none">
         <TaskHeader />
         <TaskStats />
 
-        <div className="bg-white rounded-2xl shadow-xl border border-blue-100 flex flex-col gap-4 pb-10">
+        <div className="bg-white rounded-2xl shadow-xl border border-blue-100 pb-10">
           <TaskInput />
 
-          {emptyTasks
-            ?
-            <p className="text-center text-zinc-400 mb-5">Nenhuma tarefa ainda. Adicione uma acima!</p>
-            :
-            tasks.map(task =>
-              <Task
-                key={task.id}
-                id={task.id}
-                title={task.title}
-                completed={task.completed}
-              />
-            )
-          }
+          <div className="max-h-108 flex flex-col gap-4 overflow-y-auto mt-2">
+            {emptyTasks
+              ?
+              <p className="text-center text-zinc-400">Nenhuma tarefa ainda. Adicione uma acima!</p>
+              :
+              tasks.map(task =>
+                <Task
+                  key={task.id}
+                  id={task.id}
+                  title={task.title}
+                  completed={task.completed}
+                />
+              )
+            }
+          </div>
         </div>
       </div>
     </div>
