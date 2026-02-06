@@ -1,69 +1,117 @@
-# React + TypeScript + Vite
+# ToDo List — React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Professional, minimal starter for a TypeScript React app using Vite.
 
-Currently, two official plugins are available:
+This repository implements a small ToDo application built with React, TypeScript and Vite. It includes a lightweight project structure, context-based state management, and utilities to authenticate users and manage tasks.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Key Points
 
-## Expanding the ESLint configuration
+- **Framework:** React
+- **Language:** TypeScript
+- **Bundler / Dev Server:** Vite (with HMR)
+- **Opinionated:** ESLint + Type-aware linting (optional)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Features
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Create, view and manage tasks
+- Authentication scaffolding (login, create user, token refresh)
+- Context-based state management (`AuthContext`, `TaskContext`)
+- Small, testable component set and hooks
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Quick Start
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Prerequisites: Node.js 16+ (or current LTS), and a package manager (npm, pnpm or yarn).
+
+1. Install dependencies
+
+```bash
+npm install
+# or
+pnpm install
+# or
+yarn
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Start the dev server
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
+# or
+pnpm dev
+# or
+yarn dev
 ```
+
+3. Build for production
+
+```bash
+npm run build
+# or
+pnpm build
+# or
+yarn build
+```
+
+4. Preview the production build locally
+
+```bash
+npm run preview
+# or
+pnpm preview
+# or
+yarn preview
+```
+
+Note: The exact `scripts` in `package.json` may vary; use the commands above as the common Vite conventions.
+
+## Project Structure
+
+Top-level important files and folders:
+
+- `index.html` — App entry HTML
+- `package.json` — Scripts and dependencies
+- `tsconfig.*.json` — TypeScript configuration
+- `vite.config.ts` — Vite configuration
+- `src/` — Application source code
+  - `main.tsx` — React entry
+  - `App.tsx` — Root component and routes
+  - `components/` — Reusable UI components (Task, TaskInput, TaskHeader, TaskStats)
+  - `context/` — `AuthContext`, `TaskContext` and providers
+  - `hooks/` — Custom hooks (`useAuth`, `useTasks`)
+  - `pages/` — Route pages (`Login`, `CreateUser`, `Tasks`)
+  - `routes/` — Route definitions and `PrivateRoute`
+  - `services/` — API clients and auth helpers
+  - `types/` — Shared TypeScript types
+  - `utils/` — Small utilities
+
+This structure keeps components, state, and services separated for clarity and testability.
+
+## ESLint / Formatting
+
+This template includes ESLint and can be extended with type-aware rules. For a production app consider enabling the TypeScript-aware recommended configs and the React-specific plugins.
+
+Example (local development):
+
+```bash
+# Run eslint across the project (if available in package.json)
+npm run lint
+```
+
+## Environment & Backend
+
+This project expects an API backend for authentication and tasks. Check `src/services` for the client and token refresh flow. Configure environment variables or adjust the API base URL in `services/api.ts` as needed.
+
+## Contributing
+
+Contributions are welcome. Suggested workflow:
+
+1. Fork the repository
+2. Create a feature branch
+3. Run linting/tests locally
+4. Open a Pull Request describing your changes
+
+Be sure to keep changes small and focused.
+
+## Acknowledgements
+
+This project uses Vite and React. The structure follows common best practices for small-to-medium React apps.
