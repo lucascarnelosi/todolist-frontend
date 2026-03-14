@@ -2,7 +2,7 @@ import axios from 'axios'
 import { refreshToken } from './refreshToken'
 
 export const api = axios.create({
-  baseURL: 'http://localhost:3333',
+  baseURL: 'https://todolist-backend-yxri.onrender.com/',
   withCredentials: true
 })
 
